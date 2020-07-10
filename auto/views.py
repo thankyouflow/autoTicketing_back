@@ -23,6 +23,35 @@ from selenium.webdriver.common.keys import Keys
 import time
 from django.utils import six
 
+class login_check(View):
+    #인터파크 로그인
+
+   def post(self, request):
+        data = dict(six.iterlists(request.post))
+        log_url = data['site'][0]
+        # path = "/Users/tyflow/Downloads/chromedriver"
+        # options = webdriver.ChromeOptions()
+        # options.add_argument('headless')
+        # options.add_argument('window-size=1920x1080')
+        # options.add_argument("disable-gpu")
+        # driver = webdriver.Chrome(path, chrome_options=options)
+        path = "/Users/tyflow/Downloads/chromedriver"
+        driver = webdriver.Chrome(path)
+        driver.get(log_url)
+
+        log_id = data['id'][0]
+        log_pw = data['pw'][0]
+        log = driver.find_element_by_id("userId")
+        log.send_keys(log_id)
+        log = driver.find_element_by_id("userPwd")
+        log.send_keys(log_pw)
+        log.send_keys(Keys.RETURN)
+
+        if driver.current_url == 'https://accounts.interpark.com/login/form':
+             return HttpResponse("오류")
+        else:
+             return HttpResponse("성공")
+
 class ticketing(View):
     #인터파크 로그인
 
